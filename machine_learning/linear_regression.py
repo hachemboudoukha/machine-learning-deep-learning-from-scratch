@@ -6,15 +6,15 @@ class my_LinearRegression :
          self.weights=None
          self.bias=None
     def fit(self,X,Y):
-        n_samples, n_features = X.shape()
+        n_samples, n_features = X.shape
         self.weights=np.zeros(n_features)
         self.bias=0
 
         for _ in range(self.n_iters):
             y_pred=np.dot(X,self.weights) + self.bias
 
-            dw=(1/n_samples) * np.dot(X,(y_pred-y))
-            db=(1/n_samples) * np.sum(y_pred-y)
+            dw=(1/n_samples) * np.dot(X.T,(y_pred-Y))
+            db=(1/n_samples) * np.sum(y_pred-Y)
 
             self.weights=self.weights-self.lr*dw
             self.bias=self.bias-self.lr*db
