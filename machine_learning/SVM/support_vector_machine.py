@@ -1,20 +1,7 @@
 import numpy as np
-from sklearn.metrics import accuracy_score
 
 class SVM:
     def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
-        """
-        Initialize SVM classifier
-        
-        Parameters:
-        -----------
-        learning_rate : float
-            Learning rate for gradient descent
-        lambda_param : float
-            Regularization parameter
-        n_iters : int
-            Number of iterations for training
-        """
         self.lr = learning_rate
         self.lambda_param = lambda_param
         self.n_iters = n_iters
@@ -22,17 +9,14 @@ class SVM:
         self.b = None
         
     def _initialize_weights(self, n_features):
-        """Initialize weights and bias"""
         self.w = np.zeros(n_features)
         self.b = 0
         
     def _get_hinge_loss(self, X, y):
-        """Calculate hinge loss"""
         y_pred = np.dot(X, self.w) + self.b
         return np.maximum(0, 1 - y * y_pred)
     
     def _get_gradients(self, X, y):
-        """Calculate gradients for gradient descent"""
         y_pred = np.dot(X, self.w) + self.b
         mask = y * y_pred < 1
         
@@ -42,16 +26,6 @@ class SVM:
         return dw, db
     
     def fit(self, X, y):
-        """
-        Train the SVM model
-        
-        Parameters:
-        -----------
-        X : array-like
-            Training features
-        y : array-like
-            Training labels (-1 or 1)
-        """
         n_samples, n_features = X.shape
         y_ = np.where(y <= 0, -1, 1)
         
@@ -64,55 +38,11 @@ class SVM:
             self.b -= self.lr * db
     
     def predict(self, X):
-        """
-        Make predictions for new data
-        
-        Parameters:
-        -----------
-        X : array-like
-            Features to predict
-        
-        Returns:
-        --------
-        predictions : array
-            Predicted labels (0 or 1)
-        """
         linear_output = np.dot(X, self.w) + self.b
         return np.sign(linear_output)
-    
-    def score(self, X, y):
-        """
-        Calculate accuracy
-        
-        Parameters:
-        -----------
-        X : array-like
-            Test features
-        y : array-like
-            True labels
-        
-        Returns:
-        --------
-        accuracy : float
-            Classification accuracy
-        """
-        y_pred = self.predict(X)
-        return accuracy_score(y, y_pred)
 
 class KernelSVM:
     def __init__(self, kernel='rbf', gamma=1.0, C=1.0):
-        """
-        Initialize Kernel SVM classifier
-        
-        Parameters:
-        -----------
-        kernel : str
-            Type of kernel ('rbf' or 'linear')
-        gamma : float
-            Kernel coefficient for RBF kernel
-        C : float
-            Regularization parameter
-        """
         self.kernel = kernel
         self.gamma = gamma
         self.C = C
@@ -122,46 +52,30 @@ class KernelSVM:
         self.y_train = None
         
     def _rbf_kernel(self, x1, x2):
-        """Calculate RBF kernel"""
         return np.exp(-self.gamma * np.sum((x1 - x2) ** 2))
     
     def _linear_kernel(self, x1, x2):
-        """Calculate linear kernel"""
         return np.dot(x1, x2)
     
     def _get_kernel(self, x1, x2):
-        """Get kernel value based on kernel type"""
         if self.kernel == 'rbf':
             return self._rbf_kernel(x1, x2)
         return self._linear_kernel(x1, x2)
     
     def fit(self, X, y):
-        """
-        Train the Kernel SVM model
-        
-        Parameters:
-        -----------
-        X : array-like
-            Training features
-        y : array-like
-            Training labels (-1 or 1)
-        """
         n_samples = X.shape[0]
         self.X_train = X
         self.y_train = y
         
-        # Initialize dual variables
         self.alpha = np.zeros(n_samples)
         self.b = 0
         
-        # Calculate kernel matrix
         K = np.zeros((n_samples, n_samples))
         for i in range(n_samples):
             for j in range(n_samples):
                 K[i, j] = self._get_kernel(X[i], X[j])
         
-        # SMO algorithm (simplified version)
-        for _ in range(100):  # Number of iterations
+        for _ in range(100):
             for i in range(n_samples):
                 Ei = np.sum(self.alpha * y * K[i, :]) + self.b - y[i]
                 
@@ -174,7 +88,6 @@ class KernelSVM:
                     
                     Ej = np.sum(self.alpha * y * K[j, :]) + self.b - y[j]
                     
-                    # Update alpha_i and alpha_j
                     old_alpha_i = self.alpha[i]
                     old_alpha_j = self.alpha[j]
                     
@@ -196,7 +109,6 @@ class KernelSVM:
                     
                     self.alpha[i] = old_alpha_i + y[i] * y[j] * (old_alpha_j - self.alpha[j])
                     
-                    # Update bias
                     b1 = self.b - Ei - y[i] * (self.alpha[i] - old_alpha_i) * K[i, i] - \
                          y[j] * (self.alpha[j] - old_alpha_j) * K[i, j]
                     b2 = self.b - Ej - y[i] * (self.alpha[i] - old_alpha_i) * K[i, j] - \
@@ -204,42 +116,10 @@ class KernelSVM:
                     self.b = (b1 + b2) / 2
     
     def predict(self, X):
-        """
-        Make predictions for new data
-        
-        Parameters:
-        -----------
-        X : array-like
-            Features to predict
-        
-        Returns:
-        --------
-        predictions : array
-            Predicted labels (-1 or 1)
-        """
         predictions = []
         for x in X:
             prediction = 0
             for i in range(len(self.X_train)):
                 prediction += self.alpha[i] * self.y_train[i] * self._get_kernel(x, self.X_train[i])
             predictions.append(np.sign(prediction + self.b))
-        return np.array(predictions)
-    
-    def score(self, X, y):
-        """
-        Calculate accuracy
-        
-        Parameters:
-        -----------
-        X : array-like
-            Test features
-        y : array-like
-            True labels
-        
-        Returns:
-        --------
-        accuracy : float
-            Classification accuracy
-        """
-        y_pred = self.predict(X)
-        return accuracy_score(y, y_pred) 
+        return np.array(predictions) 
