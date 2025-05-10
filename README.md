@@ -23,7 +23,7 @@ This project is a detailed implementation of Machine Learning and Deep Learning 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/machine-learning-deep-learning-from-scratch.git
+git clone https://github.com/hachem-boudoukha/machine-learning-deep-learning-from-scratch.git
 cd machine-learning-deep-learning-from-scratch
 ```
 
@@ -117,10 +117,12 @@ Contributions are welcome! Feel free to:
 This project is licensed under the MIT License - see the `LICENSE` file for details.
 
 ## 👥 Authors
-
-- Your Name - *Initial work* - [Your GitHub](https://github.com/your-username)
+- **Hachem (Mohamed El hachemi) Boudoukha**
+  - GitHub: [@hachemboudoukha](https://github.com/hachemboudoukha)
+  - LinkedIn: [Hachem Boudoukha](https://www.linkedin.com/in/hachem-boudoukha/)
+  - Email: [hachemboudoukha@gmail.com](mailto:hachemboudoukha@gmail.com)
 
 ## 🙏 Acknowledgments
 
 - Thanks to all contributors
-- Inspired by machine learning and deep learning courses
+- Inspired by machine learning specialization and Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd Edition
