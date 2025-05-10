@@ -1,47 +1,62 @@
-print('Starting test_models.py...')
-from machine_learning.KNN.k_nearest_neighbors import KNN
-from machine_learning.SVM.support_vector_machine import SVM, KernelSVM
-from machine_learning.Naive_Bayes.gaussian_naive_bayes import GaussianNaiveBayes
-from machine_learning.K_Means.k_means_clustering import KMeans
-
 import numpy as np
-from sklearn.datasets import make_classification, make_blobs
+from sklearn.datasets import load_iris, make_blobs
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, silhouette_score
 
-# Test KNN
-print("Testing KNN...")
-X, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, random_state=42)
-knn = KNN(k=3)
-knn.fit(X, y)
-pred_knn = knn.predict(X)
-accuracy_knn = np.mean(pred_knn == y)
-print("KNN accuracy:", accuracy_knn)
+from machine_learning.KNN.knn_model import KNN
+from machine_learning.SVM.svm_model import SVM, KernelSVM
+from machine_learning.Naive_Bayes.naive_bayes_model import GaussianNaiveBayes
+from machine_learning.K_Means.k_means_model import KMeans
 
-# Test SVM
-print("\nTesting SVM...")
-svm = SVM()
-svm.fit(X, y)
-pred_svm = svm.predict(X)
-accuracy_svm = np.mean(pred_svm == y)
-print("SVM accuracy:", accuracy_svm)
+def main():
+    print("Starting test_models.py...")
+    
+    # Test KNN
+    print("\nTesting KNN...")
+    iris = load_iris()
+    X, y = iris.data, iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    knn = KNN(k=3)
+    knn.fit(X_train, y_train)
+    knn_accuracy = knn.score(X_test, y_test)
+    print(f"KNN accuracy: {knn_accuracy:.2f}")
+    
+    # Test SVM
+    print("\nTesting SVM...")
+    X, y = make_blobs(n_samples=100, n_features=2, centers=2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    svm = SVM(learning_rate=0.001, lambda_param=0.01, n_iters=1000)
+    svm.fit(X_train, y_train)
+    svm_accuracy = svm.score(X_test, y_test)
+    print(f"SVM accuracy: {svm_accuracy:.2f}")
+    
+    # Test Kernel SVM
+    print("\nTesting Kernel SVM...")
+    kernel_svm = KernelSVM(learning_rate=0.001, lambda_param=0.01, n_iters=1000, kernel='rbf', gamma=1.0)
+    kernel_svm.fit(X_train, y_train)
+    kernel_svm_accuracy = kernel_svm.score(X_test, y_test)
+    print(f"Kernel SVM accuracy: {kernel_svm_accuracy:.2f}")
+    
+    # Test Gaussian Naive Bayes
+    print("\nTesting Gaussian Naive Bayes...")
+    X, y = iris.data, iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    nb = GaussianNaiveBayes()
+    nb.fit(X_train, y_train)
+    nb_accuracy = nb.score(X_test, y_test)
+    print(f"Gaussian Naive Bayes score: {nb_accuracy:.2f}")
+    
+    # Test K-Means
+    print("\nTesting K-Means...")
+    X, _ = make_blobs(n_samples=300, n_features=2, centers=3, cluster_std=0.5, random_state=42)
+    
+    kmeans = KMeans(k=3, max_iters=100)
+    kmeans.fit(X)
+    kmeans_score = kmeans.score(X)
+    print(f"K-Means silhouette score: {kmeans_score:.2f}")
 
-# Test Kernel SVM
-print("\nTesting Kernel SVM...")
-kernel_svm = KernelSVM(kernel='rbf')
-kernel_svm.fit(X, y)
-pred_kernel_svm = kernel_svm.predict(X)
-accuracy_kernel_svm = np.mean(pred_kernel_svm == y)
-print("Kernel SVM accuracy:", accuracy_kernel_svm)
-
-# Test Gaussian Naive Bayes
-print("\nTesting Gaussian Naive Bayes...")
-gnb = GaussianNaiveBayes()
-gnb.fit(X, y)
-print("Gaussian Naive Bayes score:", gnb.score(X, y))
-
-# Test K-Means
-print("\nTesting K-Means...")
-X, _ = make_blobs(n_samples=100, centers=3, n_features=2, random_state=42)
-kmeans = KMeans(n_clusters=3)
-kmeans.fit(X)
-print("K-Means silhouette score:", kmeans.score(X))
-print("K-Means inertia:", kmeans.inertia(X)) 
+if __name__ == "__main__":
+    main() 
