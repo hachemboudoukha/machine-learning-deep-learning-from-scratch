@@ -9,7 +9,7 @@ This directory contains implementations of various deep learning models from scr
    - Backpropagation
    - Sigmoid activation
    - Binary classification
-
+TO DO LATER :
 2. **Convolutional Neural Network (CNN)**
    - Convolutional layers
    - Pooling layers
