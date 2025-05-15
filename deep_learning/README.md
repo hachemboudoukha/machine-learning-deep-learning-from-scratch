@@ -2,14 +2,14 @@
 
 This directory contains implementations of various deep learning models from scratch using only NumPy. The goal is to understand the fundamental concepts and mathematics behind these models.
 
-## 🧠 Implemented Models
+##  Implemented Models
 
 1. **Neural Network (NN)**
    - Basic feedforward neural network
    - Backpropagation
    - Sigmoid activation
    - Binary classification
-TO DO LATER :
+### TO DO LATER :
 2. **Convolutional Neural Network (CNN)**
    - Convolutional layers
    - Pooling layers
@@ -73,7 +73,7 @@ nn.train(X_train, y_train, epochs=5000)
 predictions = nn.predict(X_test)
 ```
 
-## 📚 Documentation
+##  Documentation
 
 Each model directory contains:
 - Theoretical explanation
@@ -81,14 +81,14 @@ Each model directory contains:
 - Usage examples
 - Training scripts
 
-## 🧪 Testing
+##  Testing
 
 Each model includes:
 - Unit tests
 - Example training scripts
 - Performance metrics
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Feel free to:
 1. Fork the project
