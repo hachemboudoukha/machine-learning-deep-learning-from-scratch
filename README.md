@@ -78,6 +78,5 @@ python test_models.py
   - Email: [hachemboudoukha@gmail.com](mailto:hachemboudoukha@gmail.com)
 
 ## 🙏 Acknowledgments
+- Inspired by coursera course machine learning specialization &&  Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd Edition
 
-- Thanks to all contributors
-- Inspired by machine learning specialization and Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd Edition
